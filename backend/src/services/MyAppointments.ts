@@ -1,12 +1,12 @@
 import { getRepository } from 'typeorm';
 import Appointment from '../models/Appointment';
 
-class ListAppointments {
+class MyAppointments {
   async execute(): Promise<Appointment[]> {
     const appointmentRepository = getRepository(Appointment);
-    const appointments = await appointmentRepository.find({ where: { isAppointed: false } });
+    const appointments = await appointmentRepository.find({ where: { isAppointed: true } });
     return appointments;
   }
 }
 
-export default ListAppointments;
+export default MyAppointments;
