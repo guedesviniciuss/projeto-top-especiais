@@ -6,6 +6,8 @@ import {
   Platform,
 } from 'react-native';
 
+import api from '../../api';
+
 import { useNavigation } from '@react-navigation/native';
 
 import logoOdonto from '../../assets/logoodonto.png';
@@ -190,10 +192,27 @@ const doctorsMock = [
   },
 ];
 
+export interface ApplicationsData {
+  id: string;
+  doctorName: string;
+  description: string;
+  hour: Date,
+  isAppointed: boolean;
+}
+
 const Dashboard: React.FC = () => {
   // const [filteredApplication, setFilteredApplication] = useState('');
-  // const [applications, setApplications] = useState<ApplicationsData[]>([]);
+  const [applications, setApplications] = useState<ApplicationsData[]>([]);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    async function getApiData() {
+      const response = await api.get<ApplicationsData[]>('/appointments');
+      setApplications([...response.data]);
+    }
+
+    getApiData();
+  }, []);
 
   // const handleFilterApplications = useCallback(async (name: string) => {
   //   const response = await api.get<ApplicationsData[]>(`/applications`, {
@@ -232,7 +251,7 @@ const Dashboard: React.FC = () => {
           </Search>
         </Header>
         <ScrollView>
-          {doctorsMock.map(item => (
+          {applications.map(item => (
             <Card
               key={item.id}
               onPress={() =>
@@ -244,12 +263,12 @@ const Dashboard: React.FC = () => {
               <Main>
                 <Img
                   source={{
-                    uri: item.photo,
+                    uri: 'https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg?size=338&ext=jpg',
                   }}
                 />
                 <Info>
-                  <TitleApp>{item.name}</TitleApp>
-                  <Summary>{item.phone}</Summary>
+                  <TitleApp>{item.doctorName}</TitleApp>
+                  <Summary>{'(83) 988888888'}</Summary>
                 </Info>
               </Main>
             </Card>

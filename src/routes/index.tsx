@@ -17,7 +17,7 @@ const Routes: React.FC = () => (
         headerShown: false,
         cardStyle: { backgroundColor: '#c4d3f2' },
       }}
-      initialRouteName="Dashboard"
+      initialRouteName="Sign"
     >
       <Principal.Screen name="SignIn" component={SignIn} />
       <Principal.Screen name="SignUp" component={SignUp} />
