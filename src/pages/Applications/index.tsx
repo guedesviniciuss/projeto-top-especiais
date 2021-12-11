@@ -29,11 +29,11 @@ import {
   DownloadText,
   Card,
   ButtonMarcarConsulta,
-  ButtonMarcarConsultaTexto
-
+  ButtonMarcarConsultaTexto,
 } from './styles';
 
 import { ApplicationsData } from '../Dashboard';
+import api from '../../api';
 //import api from '../../services/api';
 
 interface Route {
@@ -57,11 +57,38 @@ const ENTRIES1 = [
     illustration: 'https://i.imgur.com/2nCt3Sbl.jpg',
   },
 ];
+
 const { width: screenWidth } = Dimensions.get('window');
 
 const Applications: React.FC<Route> = ({ route }) => {
   const navigation = useNavigation();
-  const { doctor } = route.params;
+  const [schedule, setSchedule] = useState<any[]>([]);
+
+  const { item } = route.params;
+
+  const handleSchedule = async (id: any) => {
+    const response = await api.patch<ApplicationsData[]>(
+      `/appointments/${id}/agendar`,
+    );
+    setSchedule(
+      schedule.map((s) => {
+        if (s.id == id) s.isAppointed = true;
+        return s;
+      }),
+    );
+  };
+
+  useEffect(() => {
+    async function fetchApi() {
+      const response = await api.get<ApplicationsData[]>(`/appointments`, {
+        params: { id: item.id },
+      });
+
+      setSchedule([...response.data]);
+    }
+
+    fetchApi();
+  }, []);
 
   const [entries, setEntries] = useState([]);
   const carouselRef = useRef(null);
@@ -74,22 +101,22 @@ const Applications: React.FC<Route> = ({ route }) => {
     setEntries(ENTRIES1);
   }, []);
 
-  const renderItem = ({ item }, parallaxProps) => {
-    return (
-      <View style={styles.item}>
-        {/* <ParallaxImage
-          source={{ uri: item.illustration }}
-          containerStyle={styles.imageContainer}
-          style={styles.image}
-          parallaxFactor={0.4}
-          {...parallaxProps}
-        /> */}
-        <Text style={styles.title} numberOfLines={2}>
-          {item.title}
-        </Text>
-      </View>
-    );
-  };
+  // const renderItem = ({ item }, parallaxProps) => {
+  //   return (
+  //     <View style={styles.item}>
+  //       {/* <ParallaxImage
+  //         source={{ uri: item.illustration }}
+  //         containerStyle={styles.imageContainer}
+  //         style={styles.image}
+  //         parallaxFactor={0.4}
+  //         {...parallaxProps}
+  //       /> */}
+  //       <Text style={styles.title} numberOfLines={2}>
+  //         {item.title}
+  //       </Text>
+  //     </View>
+  //   );
+  // };
 
   return (
     <Container>
@@ -97,27 +124,35 @@ const Applications: React.FC<Route> = ({ route }) => {
       <Header>
         <Img
           source={{
-            uri: doctor.photo,
+            uri: 'https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg?size=338&ext=jpg',
           }}
         />
         <Main>
-          <Title>{doctor.name}</Title>
-          <Description>{doctor.phone}</Description>
+          <Title>{item.doctorName}</Title>
+          <Description>{item.phone}</Description>
         </Main>
       </Header>
       <ScrollView>
-        {doctor?.schedules?.map(item => (
+        {schedule?.map((item) => (
           <Card
             key={item.id}
-            style={{background: item.available ? '#DCF8C5': '#bd0d0d'}}
-            >
-            <Text style={{ color: item.available ? '#000': '#fff'}}>Horário: {item.hour}</Text>
-            <Text style={{ color: item.available ? '#000': '#fff'}}>{item.available ? 'Disponível' : 'Não disponível'}</Text>
+            style={{ background: !item.isAppointed ? '#DCF8C5' : '#bd0d0d' }}
+          >
+            <Text style={{ color: !item.isAppointed ? '#000' : '#fff' }}>
+              Horário: {item.hour}
+            </Text>
+            <Text style={{ color: !item.isAppointed ? '#000' : '#fff' }}>
+              {!item.isAppointed ? 'Disponível' : 'Não disponível'}
+            </Text>
             <ButtonMarcarConsulta
-              disabled={!item.available}
-              style={{background: !item.available ? '#474747': 'green'}}
+              disabled={item.isAppointed}
+              style={{ background: item.isAppointed ? '#474747' : 'green' }}
             >
-              <ButtonMarcarConsultaTexto>Agendar Consulta</ButtonMarcarConsultaTexto>
+              <ButtonMarcarConsultaTexto
+                onPress={() => handleSchedule(item.id)}
+              >
+                Agendar Consulta
+              </ButtonMarcarConsultaTexto>
             </ButtonMarcarConsulta>
           </Card>
         ))}

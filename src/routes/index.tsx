@@ -8,6 +8,7 @@ import Dashboard from '../pages/Dashboard';
 import Applications from '../pages/Applications';
 import Chat from '../pages/Chat';
 import MyAppointments from '../pages/MyAppointments';
+import Profile from '../pages/Profile';
 
 const Principal = createStackNavigator();
 
@@ -26,6 +27,7 @@ const Routes: React.FC = () => (
       <Principal.Screen name="Applications" component={Applications} />
       <Principal.Screen name="Chat" component={Chat} />
       <Principal.Screen name="MyAppointments" component={MyAppointments} />
+      <Principal.Screen name="Profile" component={Profile} />
     </Principal.Navigator>
   </NavigationContainer>
 );

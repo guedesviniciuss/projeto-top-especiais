@@ -42,6 +42,13 @@ export interface ApplicationsData {
   link: string;
 }
 
+const sessionMock = {
+  id: 1,
+  patientName: 'Jose Santos',
+  email: 'email@projeto.com.br',
+  photo: 'https://image.flaticon.com/icons/png/512/1060/1060888.png',
+};
+
 const doctorsMock = [
   {
     id: 1,
@@ -206,13 +213,14 @@ export interface ApplicationsData {
 const Dashboard: React.FC = () => {
   // const [filteredApplication, setFilteredApplication] = useState('');
   const [applications, setApplications] = useState<ApplicationsData[]>([]);
+  const [isLogged, setIsLogged] = useState(true);
   const navigation = useNavigation();
 
   // retorna lista com todos os appointments
-  // const handleButtonPress = useCallback(async () => {
-  //   const response = await api.get<ApplicationsData[]>('/appointments');
-  //   setApplications([response.data]);
-  // }, []);
+  const handleButtonPress = useCallback(async () => {
+    const response = await api.get<ApplicationsData[]>('/doctors');
+    setApplications([...response.data]);
+  }, []);
 
   // const handleFilterApplications = useCallback(async (name: string) => {
   //   const response = await api.get<ApplicationsData[]>(`/applications`, {
@@ -233,12 +241,31 @@ const Dashboard: React.FC = () => {
       <Container>
         <Header>
           <Logos>
-            <UserIconContainer>
-              <Icon name="user" size={20} color={'#000'} />
+            <UserIconContainer
+              onPress={() =>
+                navigation.navigate('Profile', {
+                  patient: sessionMock,
+                })
+              }
+            >
+              {isLogged ? (
+                <Image
+                  source={{
+                    uri: 'https://image.flaticon.com/icons/png/512/1060/1060888.png',
+                  }}
+                  style={{ width: 46, height: 46 }}
+                />
+              ) : (
+                <Icon name="user" size={20} color={'#000'} />
+              )}
             </UserIconContainer>
             {/* <Image source={bradescoLogo} style={{ width: 130, height: 20 }} /> */}
             <GoToMyAppointmentsButton
-              onPress={() => navigation.navigate('MyAppointments')}
+              onPress={() =>
+                navigation.navigate('MyAppointments', {
+                  patient: sessionMock,
+                })
+              }
             >
               <ButtonText style={{ fontSize: '12px' }}>
                 Meus Agendamentos
@@ -253,20 +280,20 @@ const Dashboard: React.FC = () => {
               onChangeText={console.log}
             />
             <SearchButton
-            // onPress={() => handleFilterApplications(filteredApplication)}
-            // onPress={handleButtonPress}
+              // onPress={() => handleFilterApplications(filteredApplication)}
+              onPress={handleButtonPress}
             >
               <ButtonText>Buscar</ButtonText>
             </SearchButton>
           </Search>
         </Header>
         <ScrollView>
-          {doctorsMock.map((item) => (
+          {applications.map((item) => (
             <Card
               key={item.id}
               onPress={() =>
                 navigation.navigate('Applications', {
-                  doctor: item,
+                  item,
                 })
               }
             >

@@ -10,8 +10,9 @@ export const Container = styled.View`
 export const Header = styled.View`
   display: flex;
   flex-direction: row;
-  margin: 0px 20px;
+  margin: 5px 20px;
   align-items: center;
+  justify-content: center;
 `;
 
 export const Main = styled.View`
@@ -61,19 +62,19 @@ export const Img = styled.Image`
   border-radius: 50px;
   width: 80px;
   height: 80px;
-  margin-right: 10px;
 `;
 
 export const Return = styled(Icon)`
   margin-left: 10px;
   margin-top: 20px;
+  margin-bottom: 15px;
 `;
 
 export const Card = styled.View`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  background: #fff;
+  background: #dcf8c5;
   border-radius: 10px;
   border: 1px solid #cce7ff;
   align-self: stretch;
@@ -83,9 +84,9 @@ export const Card = styled.View`
   height: 130px;
 `;
 
-export const ButtonMarcarConsulta = styled.TouchableOpacity`
+export const ButtonCancelarConsulta = styled.TouchableOpacity`
   margin-top: 10px;
-  background: green;
+  background: #bd0d0d;
   padding: 5px;
   border-radius: 5px;
   display: flex;
@@ -94,8 +95,8 @@ export const ButtonMarcarConsulta = styled.TouchableOpacity`
   flex: 1;
 `;
 
-export const ButtonMarcarConsultaTexto = styled.Text`
-  color: #FFF;
+export const ButtonCancelarConsultaTexto = styled.Text`
+  color: #fff;
   font-size: 14px;
   display: flex;
   align-items: center;

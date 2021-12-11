@@ -25,13 +25,15 @@ export const Logos = styled.View`
   /* background-color: #fff; */
 `;
 
-export const UserIconContainer = styled.View`
+export const UserIconContainer = styled(TouchableOpacity)`
   align-items: center;
   justify-content: center;
   width: 40px;
   height: 40px;
-  background-color: #eee;
+  background-color: #f3f3f3;
   border-radius: 50%;
+  border: 1px solid #005eff;
+  overflow: hidden;
 
   /* padding: 0px 30px;
   /* padding: 0px 30px;
