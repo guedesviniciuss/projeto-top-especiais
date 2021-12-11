@@ -11,17 +11,44 @@ export const Container = styled.View`
 
 export const Header = styled.View`
   background: #a6dcff;
-  height: 200px;
+  padding: 30px 0;
   flex-direction: column;
   justify-content: center;
 `;
 
 export const Logos = styled.View`
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  padding: 0px 35px;
+  padding: 0px 25px;
+  margin-bottom: 30px;
+  /* background-color: #fff; */
+`;
+
+export const UserIconContainer = styled.View`
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: #eee;
+  border-radius: 50%;
+
+  /* padding: 0px 30px;
+  /* padding: 0px 30px;
   margin-bottom: 20px;
+  background-color: #fff; */
+`;
+
+export const GoToMyAppointmentsButton = styled(RectButton)`
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  background: #005eff;
+  padding: 2px;
+  width: 140px;
+  height: 30px;
+
+  border-radius: 5px;
 `;
 
 export const Title = styled.Text`
@@ -31,11 +58,15 @@ export const Title = styled.Text`
 
 export const Input = styled.TextInput`
   background: #fff;
-  height: 50px;
-  border-radius: 8px;
+  /* width: 80px; */
+  height: 40px;
+  border-radius: 5px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+
   padding: 0 20px;
   flex: 1;
-  margin-right: 10px;
+  /* margin-right: 10px; */
 `;
 
 export const Card = styled(TouchableOpacity)`
@@ -74,7 +105,7 @@ export const Search = styled.View`
   flex-direction: row;
   align-items: center;
   width: 100%;
-  padding: 0 30px;
+  padding: 0 25px;
 `;
 
 export const Img = styled.Image`
@@ -107,10 +138,12 @@ export const SearchButton = styled(RectButton)`
   align-items: center;
   color: #fff;
   background: #75c948;
-  width: 90px;
-  height: 50px;
+  width: 80px;
+  height: 40px;
 
-  border-radius: 8px;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 `;
 
 export const Heart = styled(Icon)`

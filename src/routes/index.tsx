@@ -7,6 +7,7 @@ import SignUp from '../pages/SignUp';
 import Dashboard from '../pages/Dashboard';
 import Applications from '../pages/Applications';
 import Chat from '../pages/Chat';
+import MyAppointments from '../pages/MyAppointments';
 
 const Principal = createStackNavigator();
 
@@ -17,13 +18,14 @@ const Routes: React.FC = () => (
         headerShown: false,
         cardStyle: { backgroundColor: '#c4d3f2' },
       }}
-      initialRouteName="Sign"
+      initialRouteName="Dashboard"
     >
       <Principal.Screen name="SignIn" component={SignIn} />
       <Principal.Screen name="SignUp" component={SignUp} />
       <Principal.Screen name="Dashboard" component={Dashboard} />
       <Principal.Screen name="Applications" component={Applications} />
       <Principal.Screen name="Chat" component={Chat} />
+      <Principal.Screen name="MyAppointments" component={MyAppointments} />
     </Principal.Navigator>
   </NavigationContainer>
 );

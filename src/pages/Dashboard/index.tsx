@@ -12,6 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 
 import logoOdonto from '../../assets/logoodonto.png';
 import bradescoLogo from '../../assets/bradesco.png';
+import Icon from 'react-native-vector-icons/Feather';
 
 import {
   Container,
@@ -27,6 +28,8 @@ import {
   Search,
   ButtonText,
   Logos,
+  GoToMyAppointmentsButton,
+  UserIconContainer,
 } from './styles';
 
 export interface ApplicationsData {
@@ -42,7 +45,7 @@ export interface ApplicationsData {
 const doctorsMock = [
   {
     id: 1,
-    name: 'Jose Santos',
+    doctorName: 'Jose Santos',
     address: 'Rua alguma rua',
     phone: '(83) 988888888',
     photo:
@@ -72,7 +75,7 @@ const doctorsMock = [
   },
   {
     id: 2,
-    name: 'Matheus Gama',
+    doctorName: 'Matheus Gama',
     address: 'Rua alguma rua',
     phone: '(83) 988888888',
     photo:
@@ -102,7 +105,7 @@ const doctorsMock = [
   },
   {
     id: 3,
-    name: 'Vinicius Guedes',
+    doctorName: 'Vinicius Guedes',
     address: 'Rua alguma rua',
     phone: '(83) 988888888',
     photo:
@@ -132,7 +135,7 @@ const doctorsMock = [
   },
   {
     id: 4,
-    name: 'Raoni',
+    doctorName: 'Raoni',
     address: 'Rua alguma rua',
     phone: '(83) 988888888',
     photo:
@@ -162,7 +165,7 @@ const doctorsMock = [
   },
   {
     id: 5,
-    name: 'Laureano',
+    doctorName: 'Laureano',
     address: 'Rua alguma rua',
     phone: '(83) 988888888',
     photo:
@@ -196,7 +199,7 @@ export interface ApplicationsData {
   id: string;
   doctorName: string;
   description: string;
-  hour: Date,
+  hour: Date;
   isAppointed: boolean;
 }
 
@@ -205,14 +208,11 @@ const Dashboard: React.FC = () => {
   const [applications, setApplications] = useState<ApplicationsData[]>([]);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    async function getApiData() {
-      const response = await api.get<ApplicationsData[]>('/appointments');
-      setApplications([...response.data]);
-    }
-
-    getApiData();
-  }, []);
+  // retorna lista com todos os appointments
+  // const handleButtonPress = useCallback(async () => {
+  //   const response = await api.get<ApplicationsData[]>('/appointments');
+  //   setApplications([response.data]);
+  // }, []);
 
   // const handleFilterApplications = useCallback(async (name: string) => {
   //   const response = await api.get<ApplicationsData[]>(`/applications`, {
@@ -233,8 +233,18 @@ const Dashboard: React.FC = () => {
       <Container>
         <Header>
           <Logos>
-            <Image source={bradescoLogo} style={{width: 130, height: 20}}/>
-            <Image source={logoOdonto} style={{width: 100, height: 40}}/>
+            <UserIconContainer>
+              <Icon name="user" size={20} color={'#000'} />
+            </UserIconContainer>
+            {/* <Image source={bradescoLogo} style={{ width: 130, height: 20 }} /> */}
+            <GoToMyAppointmentsButton
+              onPress={() => navigation.navigate('MyAppointments')}
+            >
+              <ButtonText style={{ fontSize: '12px' }}>
+                Meus Agendamentos
+              </ButtonText>
+            </GoToMyAppointmentsButton>
+            {/* <Image source={logoOdonto} style={{width: 100, height: 40}}/> */}
           </Logos>
           <Search>
             <Input
@@ -243,15 +253,15 @@ const Dashboard: React.FC = () => {
               onChangeText={console.log}
             />
             <SearchButton
-              // onPress={() => handleFilterApplications(filteredApplication)}
-              onPress={() => console.log('pesquisei')}
+            // onPress={() => handleFilterApplications(filteredApplication)}
+            // onPress={handleButtonPress}
             >
               <ButtonText>Buscar</ButtonText>
             </SearchButton>
           </Search>
         </Header>
         <ScrollView>
-          {applications.map(item => (
+          {doctorsMock.map((item) => (
             <Card
               key={item.id}
               onPress={() =>
