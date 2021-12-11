@@ -7,11 +7,16 @@ import FindAppointment from '../../services/FindAppointment';
 import ListAppointments from '../../services/ListAppointments';
 import RegisterAppointment from '../../services/RegisterAppointment';
 import MyAppointments from '../../services/MyAppointments';
+import CancelarConsulta from '../../services/CancelarConsulta';
 
 ///////// [ x ] listar agendamento
 appointmentsRoutes.get('/', async(req, res) => {
+
+  const { id } = req.query;
+  console.log(id);
+
   const listAppointments = new ListAppointments();
-  const appointments = await listAppointments.execute();
+  const appointments = await listAppointments.execute(id as string);
 
   return res.json(appointments);
 });
@@ -43,26 +48,29 @@ appointmentsRoutes.patch('/:id/agendar', async(req, res) => {
   return res.status(200).send();
 });
 
+appointmentsRoutes.patch('/:id/cancelar', async(req, res) => {
+  const { id } = req.params;
+
+  const registerAppointment = new CancelarConsulta();
+  await registerAppointment.execute(id);
+
+  return res.status(200).send();
+});
+
 ///////// [ x ] create agendamento
 appointmentsRoutes.post('/', async(req, res) => {
 
   const {
     description,
     hour,
-    doctorName,
+    doctorId,
   } = req.body;
-
-  console.log({
-    description,
-    hour,
-    doctorName,
-  });
 
   const createAppointment = new CreateAppointment();
   const appointment = await createAppointment.execute({
     description,
     hour,
-    doctorName,
+    doctorId,
   });
 
   return res.json({ appointment });

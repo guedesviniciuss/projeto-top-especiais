@@ -1,14 +1,19 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn
+  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn
 } from 'typeorm';
+import Doctor from './Doctor';
 
 @Entity('appointments')
 class Appointment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'doctor_name' })
-  doctorName: string;
+  @Column({ name: 'doctor_id' })
+  doctorId: string;
+
+  @ManyToOne(() => Doctor)
+  @JoinColumn({ name: 'doctor_id' })
+  doctor: Doctor;
 
   @Column()
   description: string;
@@ -25,6 +30,5 @@ class Appointment {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 }
-
 
 export default Appointment;

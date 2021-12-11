@@ -4,21 +4,22 @@ import Appointment from '../models/Appointment';
 interface IRequest {
   description: string,
   hour: Date,
-  doctorName: string,
+  doctorId: string,
 }
 
 class CreateAppointment {
   async execute({
     description,
     hour,
-    doctorName,
+    doctorId,
    }: IRequest): Promise<Appointment> {
     const appointmentRepository = getRepository(Appointment);
 
     const appointment = appointmentRepository.create({
+      doctorId,
       description,
       hour,
-      doctorName,
+      isAppointed: false,
     });
 
     await appointmentRepository.save(appointment);
