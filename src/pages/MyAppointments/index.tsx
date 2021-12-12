@@ -16,9 +16,17 @@ import {
 
 import { ApplicationsData } from '../Dashboard';
 import api from '../../api';
+// import { convertToDateAndHours } from '../../utils/DateConverter';
 
 interface Route {
-  route: ApplicationsData;
+  route: {
+    params: {
+      id: number;
+      patientName: string;
+      email: string;
+      photo: string;
+    };
+  };
 }
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -30,19 +38,27 @@ const onRemove = (removeId, data) => {
 
 const MyAppointments: React.FC<Route> = ({ route }) => {
   const navigation = useNavigation();
-  const { photo } = route.params.patient;
+  const { photo } = route.params;
   const [appointments, setAppointments] = useState<ApplicationsData[]>([]);
 
   useEffect(() => {
     async function fetchApi() {
       const response = await api.get<ApplicationsData[]>(`/appointments/mine`);
-
+      console.log(response.data);
       setAppointments([...response.data]);
       console.log();
     }
+    // convertToDateAndHours(appointments[0].hour);
 
     fetchApi();
   }, []);
+
+  const handleCancel = async (id: any) => {
+    const response = await api.patch<ApplicationsData[]>(
+      `/appointments/${id}/cancelar`,
+    );
+    setAppointments(onRemove(id, appointments));
+  };
 
   return (
     <Container>
@@ -58,10 +74,13 @@ const MyAppointments: React.FC<Route> = ({ route }) => {
         {appointments?.map((item) => (
           <Card key={item.id}>
             <Text style={{ color: '#000' }}>Horário: {item.hour}</Text>
-            <Text style={{ color: '#000' }}>Horário: {item.hour}</Text>
-            <ButtonCancelarConsulta
-              onPress={() => setAppointments(onRemove(item.id, appointments))}
-            >
+            <Text style={{ color: '#000' }}>
+              Médico: {item.doctor.doctorName}
+            </Text>
+            <Text style={{ color: '#000' }}>
+              Especialidade: {item.doctor.especialidade}
+            </Text>
+            <ButtonCancelarConsulta onPress={() => handleCancel(item.id)}>
               <ButtonCancelarConsultaTexto>
                 Cancelar Consulta
               </ButtonCancelarConsultaTexto>

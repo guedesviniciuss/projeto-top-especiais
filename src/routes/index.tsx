@@ -9,6 +9,7 @@ import Applications from '../pages/Applications';
 import Chat from '../pages/Chat';
 import MyAppointments from '../pages/MyAppointments';
 import Profile from '../pages/Profile';
+import CameraTest from '../pages/Camera';
 
 const Principal = createStackNavigator();
 
@@ -19,7 +20,7 @@ const Routes: React.FC = () => (
         headerShown: false,
         cardStyle: { backgroundColor: '#c4d3f2' },
       }}
-      initialRouteName="Dashboard"
+      initialRouteName="SignIn"
     >
       <Principal.Screen name="SignIn" component={SignIn} />
       <Principal.Screen name="SignUp" component={SignUp} />
@@ -28,6 +29,7 @@ const Routes: React.FC = () => (
       <Principal.Screen name="Chat" component={Chat} />
       <Principal.Screen name="MyAppointments" component={MyAppointments} />
       <Principal.Screen name="Profile" component={Profile} />
+      <Principal.Screen name="CameraTest" component={CameraTest} />
     </Principal.Navigator>
   </NavigationContainer>
 );

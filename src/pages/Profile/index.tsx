@@ -24,7 +24,16 @@ interface Message {
 }
 
 interface Route {
-  route: ApplicationsData;
+  route: {
+    params: {
+      patient: {
+        id: number;
+        patientName: string;
+        email: string;
+        photo: string;
+      };
+    };
+  };
 }
 
 const Profile: React.FC<Route> = ({ route }) => {
@@ -45,7 +54,7 @@ const Profile: React.FC<Route> = ({ route }) => {
             uri: photo,
           }}
         />
-        <CameraIconContainer onPress={() => console.info('')}>
+        <CameraIconContainer onPress={() => navigation.navigate('CameraTest')}>
           <Icon name="camera" size={16} color={'#000'} />
         </CameraIconContainer>
       </Header>

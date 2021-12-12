@@ -37,7 +37,11 @@ import api from '../../api';
 //import api from '../../services/api';
 
 interface Route {
-  route: ApplicationsData;
+  route: {
+    params: {
+      item: ApplicationsData;
+    };
+  };
 }
 
 const ENTRIES1 = [

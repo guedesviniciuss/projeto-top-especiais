@@ -32,14 +32,22 @@ import {
   UserIconContainer,
 } from './styles';
 
-export interface ApplicationsData {
-  id: string;
-  name: string;
-  summary: string;
-  description: string;
-  thumbnail: string;
-  phone: number;
-  link: string;
+// export interface ApplicationsData {
+//   id: string;
+//   name: string;
+//   summary: string;
+//   description: string;
+//   thumbnail: string;
+//   phone: number;
+//   link: string;
+// }
+
+export interface Camera {
+  cameraModalOpened: boolean;
+  dataModalOpened: boolean;
+  realtyData: {
+    images: [];
+  };
 }
 
 const sessionMock = {
@@ -208,6 +216,15 @@ export interface ApplicationsData {
   description: string;
   hour: Date;
   isAppointed: boolean;
+  phone: string;
+  doctor: {
+    id: string;
+    doctorName: string;
+    phone: string;
+    especialidade: string;
+    createdAt: string;
+    updatedAt: string;
+  };
 }
 
 const Dashboard: React.FC = () => {

@@ -81,7 +81,7 @@ export const Card = styled.View`
   text-align: center;
   margin: 5px 15px;
   padding: 20px;
-  height: 130px;
+  height: 150px;
 `;
 
 export const ButtonCancelarConsulta = styled.TouchableOpacity`
