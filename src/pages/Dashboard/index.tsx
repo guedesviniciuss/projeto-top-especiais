@@ -53,7 +53,7 @@ export interface Camera {
 const sessionMock = {
   id: 1,
   patientName: 'Jose Santos',
-  email: 'email@projeto.com.br',
+  email: 'j.santos@projeto.com.br',
   photo: 'https://image.flaticon.com/icons/png/512/1060/1060888.png',
 };
 
@@ -231,11 +231,23 @@ const Dashboard: React.FC = () => {
   // const [filteredApplication, setFilteredApplication] = useState('');
   const [applications, setApplications] = useState<ApplicationsData[]>([]);
   const [isLogged, setIsLogged] = useState(true);
+  const [filterText, setFilterText] = useState('');
   const navigation = useNavigation();
 
+  useEffect(() => {
+    async function fetchApi() {
+      const response = await api.get<ApplicationsData[]>('/doctors');
+      setApplications([...response.data]);
+    }
+    fetchApi();
+  }, []);
+
   // retorna lista com todos os appointments
-  const handleButtonPress = useCallback(async () => {
-    const response = await api.get<ApplicationsData[]>('/doctors');
+  const handleButtonPress = useCallback(async (name: string) => {
+    const response = await api.get<ApplicationsData[]>('/doctors', {
+      params: { name },
+    });
+    console.log(response);
     setApplications([...response.data]);
   }, []);
 
@@ -294,11 +306,11 @@ const Dashboard: React.FC = () => {
             <Input
               placeholder="Busque os nossos doutores"
               // onChangeText={text => setFilteredApplication(text)}
-              onChangeText={console.log}
+              onChangeText={(value) => setFilterText(value)}
             />
             <SearchButton
               // onPress={() => handleFilterApplications(filteredApplication)}
-              onPress={handleButtonPress}
+              onPress={() => handleButtonPress(filterText)}
             >
               <ButtonText>Buscar</ButtonText>
             </SearchButton>
