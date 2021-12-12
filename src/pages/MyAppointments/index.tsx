@@ -16,15 +16,15 @@ import {
 
 import { ApplicationsData } from '../Dashboard';
 import api from '../../api';
-// import { convertToDateAndHours } from '../../utils/DateConverter';
-
 interface Route {
   route: {
     params: {
-      id: number;
-      patientName: string;
-      email: string;
-      photo: string;
+      patient: {
+        id: number;
+        patientName: string;
+        email: string;
+        photo: string;
+      };
     };
   };
 }
@@ -38,15 +38,13 @@ const onRemove = (removeId, data) => {
 
 const MyAppointments: React.FC<Route> = ({ route }) => {
   const navigation = useNavigation();
-  const { photo } = route.params;
+  const { photo } = route.params.patient;
   const [appointments, setAppointments] = useState<ApplicationsData[]>([]);
 
   useEffect(() => {
     async function fetchApi() {
       const response = await api.get<ApplicationsData[]>(`/appointments/mine`);
-      console.log(response.data);
       setAppointments([...response.data]);
-      console.log();
     }
     // convertToDateAndHours(appointments[0].hour);
 

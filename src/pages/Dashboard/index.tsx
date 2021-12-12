@@ -10,8 +10,6 @@ import api from '../../api';
 
 import { useNavigation } from '@react-navigation/native';
 
-import logoOdonto from '../../assets/logoodonto.png';
-import bradescoLogo from '../../assets/bradesco.png';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {
@@ -32,16 +30,6 @@ import {
   UserIconContainer,
 } from './styles';
 
-// export interface ApplicationsData {
-//   id: string;
-//   name: string;
-//   summary: string;
-//   description: string;
-//   thumbnail: string;
-//   phone: number;
-//   link: string;
-// }
-
 export interface Camera {
   cameraModalOpened: boolean;
   dataModalOpened: boolean;
@@ -49,6 +37,128 @@ export interface Camera {
     images: [];
   };
 }
+
+export interface ApplicationsData {
+  id: string;
+  doctorName: string;
+  description: string;
+  hour: Date;
+  isAppointed: boolean;
+  phone: string;
+  doctor: {
+    id: string;
+    doctorName: string;
+    phone: string;
+    especialidade: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+}
+
+const Dashboard: React.FC = () => {
+  const [applications, setApplications] = useState<ApplicationsData[]>([]);
+  const [isLogged, setIsLogged] = useState(true);
+  const [filterText, setFilterText] = useState('');
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    async function fetchApi() {
+      const response = await api.get<ApplicationsData[]>('/doctors');
+      setApplications([...response.data]);
+    }
+    fetchApi();
+  }, []);
+
+  const handleButtonPress = useCallback(async (name: string) => {
+    const response = await api.get<ApplicationsData[]>('/doctors', {
+      params: { name },
+    });
+    setApplications([...response.data]);
+  }, []);
+
+  return (
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled
+    >
+      <Container>
+        <Header>
+          <Logos>
+            <UserIconContainer
+              onPress={() =>
+                navigation.navigate('Profile', {
+                  patient: sessionMock,
+                })
+              }
+            >
+              {isLogged ? (
+                <Image
+                  source={{
+                    uri: 'https://image.flaticon.com/icons/png/512/1060/1060888.png',
+                  }}
+                  style={{ width: 46, height: 46 }}
+                />
+              ) : (
+                <Icon name="user" size={20} color={'#000'} />
+              )}
+            </UserIconContainer>
+            <GoToMyAppointmentsButton
+              onPress={() =>
+                navigation.navigate('MyAppointments', {
+                  patient: sessionMock,
+                })
+              }
+            >
+              <ButtonText style={{ fontSize: '12px' }}>
+                Meus Agendamentos
+              </ButtonText>
+            </GoToMyAppointmentsButton>
+          </Logos>
+          <Search>
+            <Input
+              placeholder="Busque os nossos doutores"
+              // onChangeText={text => setFilteredApplication(text)}
+              onChangeText={(value) => setFilterText(value)}
+            />
+            <SearchButton
+              // onPress={() => handleFilterApplications(filteredApplication)}
+              onPress={() => handleButtonPress(filterText)}
+            >
+              <ButtonText>Buscar</ButtonText>
+            </SearchButton>
+          </Search>
+        </Header>
+        <ScrollView>
+          {applications.map((item) => (
+            <Card
+              key={item.id}
+              onPress={() =>
+                navigation.navigate('Applications', {
+                  item,
+                })
+              }
+            >
+              <Main>
+                <Img
+                  source={{
+                    uri: 'https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg?size=338&ext=jpg',
+                  }}
+                />
+                <Info>
+                  <TitleApp>{item.doctorName}</TitleApp>
+                  <Summary>{'(83) 988888888'}</Summary>
+                </Info>
+              </Main>
+            </Card>
+          ))}
+        </ScrollView>
+      </Container>
+    </KeyboardAvoidingView>
+  );
+};
+
+export default Dashboard;
 
 const sessionMock = {
   id: 1,
@@ -209,140 +319,3 @@ const doctorsMock = [
     ],
   },
 ];
-
-export interface ApplicationsData {
-  id: string;
-  doctorName: string;
-  description: string;
-  hour: Date;
-  isAppointed: boolean;
-  phone: string;
-  doctor: {
-    id: string;
-    doctorName: string;
-    phone: string;
-    especialidade: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-}
-
-const Dashboard: React.FC = () => {
-  // const [filteredApplication, setFilteredApplication] = useState('');
-  const [applications, setApplications] = useState<ApplicationsData[]>([]);
-  const [isLogged, setIsLogged] = useState(true);
-  const [filterText, setFilterText] = useState('');
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    async function fetchApi() {
-      const response = await api.get<ApplicationsData[]>('/doctors');
-      setApplications([...response.data]);
-    }
-    fetchApi();
-  }, []);
-
-  // retorna lista com todos os appointments
-  const handleButtonPress = useCallback(async (name: string) => {
-    const response = await api.get<ApplicationsData[]>('/doctors', {
-      params: { name },
-    });
-    console.log(response);
-    setApplications([...response.data]);
-  }, []);
-
-  // const handleFilterApplications = useCallback(async (name: string) => {
-  //   const response = await api.get<ApplicationsData[]>(`/applications`, {
-  //     params: {
-  //       name,
-  //     },
-  //   });
-
-  //   setApplications([...response.data]);
-  // }, []);
-
-  return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      enabled
-    >
-      <Container>
-        <Header>
-          <Logos>
-            <UserIconContainer
-              onPress={() =>
-                navigation.navigate('Profile', {
-                  patient: sessionMock,
-                })
-              }
-            >
-              {isLogged ? (
-                <Image
-                  source={{
-                    uri: 'https://image.flaticon.com/icons/png/512/1060/1060888.png',
-                  }}
-                  style={{ width: 46, height: 46 }}
-                />
-              ) : (
-                <Icon name="user" size={20} color={'#000'} />
-              )}
-            </UserIconContainer>
-            {/* <Image source={bradescoLogo} style={{ width: 130, height: 20 }} /> */}
-            <GoToMyAppointmentsButton
-              onPress={() =>
-                navigation.navigate('MyAppointments', {
-                  patient: sessionMock,
-                })
-              }
-            >
-              <ButtonText style={{ fontSize: '12px' }}>
-                Meus Agendamentos
-              </ButtonText>
-            </GoToMyAppointmentsButton>
-            {/* <Image source={logoOdonto} style={{width: 100, height: 40}}/> */}
-          </Logos>
-          <Search>
-            <Input
-              placeholder="Busque os nossos doutores"
-              // onChangeText={text => setFilteredApplication(text)}
-              onChangeText={(value) => setFilterText(value)}
-            />
-            <SearchButton
-              // onPress={() => handleFilterApplications(filteredApplication)}
-              onPress={() => handleButtonPress(filterText)}
-            >
-              <ButtonText>Buscar</ButtonText>
-            </SearchButton>
-          </Search>
-        </Header>
-        <ScrollView>
-          {applications.map((item) => (
-            <Card
-              key={item.id}
-              onPress={() =>
-                navigation.navigate('Applications', {
-                  item,
-                })
-              }
-            >
-              <Main>
-                <Img
-                  source={{
-                    uri: 'https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg?size=338&ext=jpg',
-                  }}
-                />
-                <Info>
-                  <TitleApp>{item.doctorName}</TitleApp>
-                  <Summary>{'(83) 988888888'}</Summary>
-                </Info>
-              </Main>
-            </Card>
-          ))}
-        </ScrollView>
-      </Container>
-    </KeyboardAvoidingView>
-  );
-};
-
-export default Dashboard;
