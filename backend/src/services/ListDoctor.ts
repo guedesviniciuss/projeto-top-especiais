@@ -1,10 +1,16 @@
-import { getRepository } from 'typeorm';
+import { getRepository, Like } from 'typeorm';
 import Doctor from '../models/Doctor';
 
 class ListDoctors {
-  async execute(): Promise<Doctor[]> {
+  async execute(name: string): Promise<Doctor[] | undefined> {
     const doctorRepository = getRepository(Doctor);
-    const doctors = await doctorRepository.find();
+
+    let doctors;
+    if(name !== undefined) {
+      doctors = await doctorRepository.find({ doctorName: Like(`%${name}%`) });
+    } else {
+      doctors = await doctorRepository.find();
+    }
     return doctors;
   }
 }

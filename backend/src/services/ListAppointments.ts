@@ -7,9 +7,9 @@ class ListAppointments {
 
     let appointments;
     if(id !== 'undefined') {
-      appointments = await appointmentRepository.find({ where: { isAppointed: false, doctorId: id } });
+      appointments = await appointmentRepository.find({ where: { doctorId: id } });
     } else {
-      appointments = await appointmentRepository.find({ where: { isAppointed: false } });
+      appointments = await appointmentRepository.find();
     }
 
     return appointments;

@@ -7,7 +7,10 @@ const doctorsRoutes = Router();
 
 doctorsRoutes.get('/', async(req, res) => {
   const listDoctors = new ListDoctors();
-  const appointments = await listDoctors.execute();
+
+  const { name } = req.query;
+
+  const appointments = await listDoctors.execute(name as string);
 
   return res.json(appointments);
 });
